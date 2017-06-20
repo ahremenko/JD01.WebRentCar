@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.htp.ahremenko.command.Command;
 import by.htp.ahremenko.domain.User;
-import by.htp.ahremenko.service.ServiceFactory;
+import by.htp.ahremenko.service.factory.ServiceFactory;
 import by.htp.ahremenko.service.UserService;
 
 public class Authorization implements Command {

@@ -8,7 +8,7 @@
 <title>RentCarApp</title>
 </head>
 <body>
-	<form action ="Rent Car" method="post">
+	<form action ="RentCarApp" method="post">
 		<input type="hidden" name="command" value="authorization"/>
 		Login:<br/>
 		<input type="text" name="Login" value=""/><br/>

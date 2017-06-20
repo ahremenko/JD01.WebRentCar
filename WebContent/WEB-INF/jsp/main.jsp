@@ -8,7 +8,7 @@
 <title>main.jsp</title>
 </head>
 <body>
-Hi, user: 
+Hi, dear user: 
 <%
 /*
  User user = (User)request.getAttribute("user");

@@ -1,5 +1,6 @@
-package by.htp.ahremenko.service;
+package by.htp.ahremenko.service.factory;
 
+import by.htp.ahremenko.service.UserService;
 import by.htp.ahremenko.service.impl.UserServiceImpl;
 
 public class ServiceFactory {
