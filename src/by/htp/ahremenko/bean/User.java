@@ -1,9 +1,11 @@
-package by.htp.ahremenko.domain;
+package by.htp.ahremenko.bean;
 
 public class User {
 	private String name;
 	private String login;
 	private String password;
+	private int isAdmin;
+	private int id;
 
 	public User (String l, String n) {
 		login = l;
@@ -34,4 +36,21 @@ public class User {
 		this.password = password;
 	}
 
+	public int getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(int is_admin) {
+		this.isAdmin = is_admin;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	
 }

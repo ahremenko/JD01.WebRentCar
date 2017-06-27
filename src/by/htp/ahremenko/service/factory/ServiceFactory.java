@@ -1,12 +1,12 @@
 package by.htp.ahremenko.service.factory;
 
-import by.htp.ahremenko.service.UserService;
-import by.htp.ahremenko.service.impl.UserServiceImpl;
+import by.htp.ahremenko.service.RentCarService;
+import by.htp.ahremenko.service.impl.RentCarServiceImpl;
 
 public class ServiceFactory {
 private static final ServiceFactory instance = new ServiceFactory();
 	
-	private final UserServiceImpl userService = new UserServiceImpl();
+	private final RentCarService rentCarService = new RentCarServiceImpl();
 	
 	private ServiceFactory(){}
 	
@@ -14,7 +14,7 @@ private static final ServiceFactory instance = new ServiceFactory();
 		return instance;
 	}
 	
-	public UserService getUserService() {
-		return userService;
+	public RentCarService getRentCarService() {
+		return rentCarService;
 	}
 }

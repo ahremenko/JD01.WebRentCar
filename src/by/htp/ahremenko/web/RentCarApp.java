@@ -9,20 +9,31 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.htp.ahremenko.command.Command;
 import by.htp.ahremenko.command.CommandProvider;
+import by.htp.ahremenko.command.SessionPool;
+import by.htp.ahremenko.dao.connection.ConnectionPool;
+import by.htp.ahremenko.dao.connection.ConnectionPoolException;
+
 
 public class RentCarApp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final CommandProvider provider = new CommandProvider();
 
     public RentCarApp() {
-        super();
+    	super();
     }
     //^ циркумфлекс
     // квантификаторы - ? ленивый, * ревнивый, + - жадный ))
     
 	@Override
 	public void init() throws ServletException {
-		super.init();
+		
+		ConnectionPool conPool = ConnectionPool.getInstance();
+		
+		try {
+			conPool.initPoolData();
+		} catch (ConnectionPoolException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

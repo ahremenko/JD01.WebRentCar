@@ -5,21 +5,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>RentCarApp</title>
+<title>RentCarApp Error</title>
 </head>
 <body>
-	<form action ="RentCarApp" method="post">
-		<input type="hidden" name="command" value="authorization"/>
-		Login:<br/>
-		<input type="text" name="Login" value=""/><br/>
-		Password:<br/>
-		<input type="password" name="password" value=""/><br/>
-		<input type="submit" value="Sign in"/>
-	</form>
-	
+	<h1>
 	<c:if test = "${not empty requestScope.errorMessage}">
 		<c:out value="${requestScope.errorMessage}"/>
 	</c:if>
-	
+	</h1>
+	<A HREF="index.jsp">home</A>
 </body>
 </html>
