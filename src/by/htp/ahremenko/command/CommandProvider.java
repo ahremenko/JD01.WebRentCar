@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import by.htp.ahremenko.command.impl.Authorization;
+import by.htp.ahremenko.command.impl.GetAllUsers;
 import by.htp.ahremenko.command.Command;
 
 public class CommandProvider {
@@ -12,6 +13,7 @@ public class CommandProvider {
 
 	public CommandProvider(){
 		commands.put(Commands.AUTHORIZATION, new Authorization());		
+		commands.put(Commands.GETALLUSERS, new GetAllUsers());
 	}
 	
 	public Command getCommand(String commandName){

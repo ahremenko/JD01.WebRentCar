@@ -1,6 +1,7 @@
 package by.htp.ahremenko.command.impl;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,7 +36,13 @@ public class Authorization implements Command {
 				Cookie sessionId = new Cookie("sessionId", sessionPool.addNewSession(user.getId()) );
 				request.setAttribute("user", user);
 				response.addCookie(sessionId);
-				page = "WEB-INF/jsp/main.jsp";
+				if (user.getIsAdmin()==1) {
+					Collection users = rentCarService.GetAllUsers();
+					request.setAttribute("users", users);
+					page = "WEB-INF/jsp/admin.jsp";
+				} else {
+					page = "WEB-INF/jsp/main.jsp";
+				}	
 			} else {
 				request.setAttribute("errorMessage", "User not found or wrong password!");
 				page = "index.jsp";
