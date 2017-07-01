@@ -10,6 +10,10 @@ public interface RentCarService {
 		public User Authorization (String login, String password) throws ServiceException;
 
 		public Collection GetAllUsers() throws ServiceException;
+		
+		public boolean deleteUserById(int id) throws ServiceException;
+		
+		public User getUserById(int id) throws ServiceException;
 
 }
 

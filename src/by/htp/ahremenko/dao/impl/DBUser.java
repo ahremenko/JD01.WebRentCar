@@ -16,13 +16,14 @@ import by.htp.ahremenko.dao.DAOUser;
 import by.htp.ahremenko.dao.connection.ConnectionPool;
 import by.htp.ahremenko.dao.connection.ConnectionPoolException;
 import by.htp.ahremenko.dao.exception.DAOException;
+import by.htp.ahremenko.service.exception.ServiceException;
 
 
 public class DBUser implements DAOUser {
 	private static final Logger logger =LogManager.getRootLogger();
 
 	@Override
-	public User Autorization(String lgn, String pwd) throws DAOException {
+	public User autorization(String lgn, String pwd) throws DAOException {
 
 		ConnectionPool conPool = ConnectionPool.getInstance();
 		Connection con = null;
@@ -57,13 +58,20 @@ public class DBUser implements DAOUser {
 		} finally {
 			try {
 				if (rs != null ){rs.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+			try {
 				if (ps != null){ ps.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+			try {
 				if (con != null) {con.close();}
 			} catch (SQLException e) {
 				throw new DAOException("SQL-Exception: " + e.getMessage());
 			}
 		}
-		
 		return user;
 	}
 	
@@ -99,7 +107,15 @@ public class DBUser implements DAOUser {
 		} finally {
 			try {
 				if (rs != null ){rs.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+			try {
 				if (ps != null){ ps.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+			try {
 				if (con != null) {con.close();}
 			} catch (SQLException e) {
 				throw new DAOException("SQL-Exception: " + e.getMessage());
@@ -107,6 +123,86 @@ public class DBUser implements DAOUser {
 		}
 		return users;
     }
+	
+	@Override
+	public User getUserById( int id) throws DAOException {
+		ConnectionPool conPool = ConnectionPool.getInstance();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		User user = null;
+		try {
+			try {
+				con = conPool.takeConnection();
+			} catch (ConnectionPoolException e) {
+				throw new DAOException("Can't take connection!");
+			}
+			String sqlQuery = "SELECT id, user_name, user_login, IFNULL(is_admin,0) FROM rentcar.rc_user WHERE rec_state = 1 and id = ?";
+			ps = con.prepareStatement(sqlQuery);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				user = new User(rs.getString(3),rs.getString(2));
+				user.setId(rs.getInt(1));
+				user.setIsAdmin( (rs.getInt(4) == 1 ? 1 : 0 ) );
+			}
+			
+		} catch (SQLException e) {
+			logger.info("SQL-Exception: " + e.getMessage());
+			throw new DAOException("SQL-Exception: " + e.getMessage());
+		} finally {
+			try {
+				if (rs != null ){rs.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+			try {
+				if (ps != null){ ps.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+			try {
+				if (con != null) {con.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+		}
+		return user;
+	}
+
+	@Override
+	public boolean deleteUserById(int id) throws DAOException {
+		ConnectionPool conPool = ConnectionPool.getInstance();
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			try {
+				con = conPool.takeConnection();
+			} catch (ConnectionPoolException e) {
+				throw new DAOException("Can't take connection!");
+			}
+			String sqlQuery = "UPDATE rentcar.rc_user SET rec_state = 0 WHERE rec_state = 1 and id = ?";
+			ps = con.prepareStatement(sqlQuery);
+			ps.setInt(1, id);
+			ps.executeUpdate();
+			return true;
+			
+		} catch (SQLException e) {
+			logger.info("SQL-Exception: " + e.getMessage());
+			throw new DAOException("SQL-Exception: " + e.getMessage());
+		} finally {
+			try {
+				if (ps != null){ ps.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+			try {
+				if (con != null) {con.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+		}
+	}
 	
 	/*@Override
 	public String EditUser(String lgn, String pwd, String nm) {

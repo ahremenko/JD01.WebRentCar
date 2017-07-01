@@ -21,7 +21,7 @@ public class RentCarServiceImpl implements RentCarService {
 		try {
 			DAOFactory daoObjectFactory = DAOFactory.getInstance();
 			DAOUser user = daoObjectFactory.getDAOUser();
-			User realUser = user.Autorization(login,password);
+			User realUser = user.autorization(login,password);
 			if (realUser != null) {
 				return realUser;
 			} 
@@ -45,4 +45,34 @@ public class RentCarServiceImpl implements RentCarService {
 			throw new ServiceException(e.getMessage());
 		}
 	}
+
+	@Override
+	public boolean deleteUserById(int id) throws ServiceException {
+		try {
+			DAOFactory daoObjectFactory = DAOFactory.getInstance();
+			DAOUser user = daoObjectFactory.getDAOUser();
+			return user.deleteUserById(id);
+		} catch ( DAOException e) {
+			logger.error("Error on server:" + e.getMessage());
+			throw new ServiceException(e.getMessage());
+		}
+	}
+
+	@Override
+	public User getUserById(int id) throws ServiceException {
+		try {
+			DAOFactory daoObjectFactory = DAOFactory.getInstance();
+			DAOUser user = daoObjectFactory.getDAOUser();
+			User realUser = user.getUserById(id);
+			if (realUser != null) {
+				return realUser;
+			} 
+		} catch ( DAOException e) {
+			logger.error("Error on server:" + e.getMessage());
+			throw new ServiceException(e.getMessage());
+		}
+		return null;
+	}
+	
+	
 }

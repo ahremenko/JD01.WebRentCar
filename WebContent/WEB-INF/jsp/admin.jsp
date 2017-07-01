@@ -4,19 +4,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="css/main.css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>main.jsp</title>
 </head>
 <body>
-<form action="<c:url value="/main"/>" method="POST">
+<form action ="RentCarApp" method="POST">
 <div class="page">
+	<input type="hidden" name="command" value="editUser"/>
 	<div class="userinfo">
-		Hi, <c:out value="${requestScope.user.name}"/>.
+		Hi, <c:out value="${requestScope.user.getName()}"/>.
 		<% User user = (User)request.getAttribute("user");
    			if (user.getIsAdmin() == 1) {
 	   			out.println("ADM.");
    			}
-   			out.println("ID: " + user.getId());
+   			out.println("[ id: " + user.getId() + " ]");
 		%>
 	</div>
 	<div class="menu">
@@ -24,7 +26,7 @@
 		<a class="onemenu" onclick="showAllCars()">List of cars</a>
 		<a class="onemenu" onclick="logout()">Logout</a>
 	</div>
-	<div class="tablemenu">
+	<div class="grid">
 		<table>
                 <tr>
                     <th> </th>
@@ -41,7 +43,8 @@
                 </tr>
                 </c:forEach>
         </table>
-                
+	</div>
+	<div class="actions">
         <table>
                 <tr>
                     <td><input type="submit" value="Add" name="Add"/></td>
@@ -50,7 +53,15 @@
                 </tr>
         </table>
 	</div>
-	<div class="data">
+	<div class="errorMessage">
+		<c:if test = "${not empty requestScope.errorMessage}">
+			<c:out value="${requestScope.errorMessage}"/>
+		</c:if>
+	</div>
+	<div class="infoMessage">	
+		<c:if test = "${not empty requestScope.infoMessage}">
+			<c:out value="${requestScope.infoMessage}"/>
+		</c:if>
 	</div>
 </div>
 </form>
