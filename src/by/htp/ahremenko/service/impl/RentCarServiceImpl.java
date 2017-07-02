@@ -74,5 +74,17 @@ public class RentCarServiceImpl implements RentCarService {
 		return null;
 	}
 	
+	@Override
+	public boolean editUser(User usr) throws ServiceException {
+		try {
+			DAOFactory daoObjectFactory = DAOFactory.getInstance();
+			DAOUser user = daoObjectFactory.getDAOUser();
+			return user.editUser(usr);
+		} catch ( DAOException e) {
+			logger.error("Error on server:" + e.getMessage());
+			throw new ServiceException(e.getMessage());
+		}
+	}
+
 	
 }

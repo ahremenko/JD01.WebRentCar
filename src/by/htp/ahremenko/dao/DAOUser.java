@@ -12,6 +12,6 @@ public interface DAOUser {
 	public Collection getAllUsers() throws DAOException;
 	public User getUserById(int id) throws DAOException;
 	public boolean deleteUserById(int id) throws DAOException;
-	//public String EditUser(String lgn, String pwd, String nm);
+	public boolean editUser(User usr) throws DAOException;
 	
 }

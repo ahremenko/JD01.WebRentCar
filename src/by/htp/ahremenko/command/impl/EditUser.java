@@ -29,71 +29,91 @@ public class EditUser implements Command {
 		ServiceFactory factory = ServiceFactory.getInstance();
 		RentCarService rentCarService = factory.getRentCarService();
 		SessionPool sessionPool = SessionPool.getInstance();
-		String page = "";
-		
-		int answer = checkAction(request);
+		String page = "";		
 		String userId = request.getParameter("userId");
-		String login = request.getParameter("userLogin");
-		String password = request.getParameter("userPassword");
-		String isAdmin = request.getParameter("isAdmin");
 		
-		logger.info("Start editUser() command!   answer: " + answer + ", userId: " + userId );
 		
 		try {
 			
-			if (answer == 3) {
-				//delete user
-				 if (userId != null) {
+			 if (request.getParameter("Delete") != null) {
+   			     //logger.info("Start deleteUserById ( " + userId + " ) ");
+				 if (!userId.equals(null)) {
 					    if (rentCarService.deleteUserById(Integer.parseInt(userId))) {
-					    	request.setAttribute("infoMessage", "User was deleted.");
+					    	request.setAttribute("infoMessage", "User was deleted successfully.");
 					    } else {
-					    	request.setAttribute("errorMessage", "User was not deleted! See log, please.");
+					    	request.setAttribute("errorMessage", "User was not deleted!");
 					    }	
 		         }
+				 //logger.info("deleteUserById done." );
 				 Collection users = rentCarService.GetAllUsers();
+				 //logger.info("GetAllUsers() done." );
 				 request.setAttribute("users", users);
+				 //logger.info("setAttribute(users) done." );
 				 page = "WEB-INF/jsp/admin.jsp";
 			}
 			
-			/*
-  		    User user = rentCarService.Authorization(login, password);
-			if (user!=null) {
-				Cookie sessionId = new Cookie("sessionId", sessionPool.addNewSession(user.getId()) );
-				request.setAttribute("user", user);
-				response.addCookie(sessionId);
-				if (user.getIsAdmin()==1) {
-					Collection users = rentCarService.GetAllUsers();
-					request.setAttribute("users", users);
-					page = "WEB-INF/jsp/admin.jsp";
-				} else {
-					page = "WEB-INF/jsp/main.jsp";
+			if (request.getParameter("Edit") != null) {
+				if (!userId.equals(null)) {
+					User user4Edit = rentCarService.getUserById(Integer.parseInt(userId));
+					request.setAttribute("user4Edit", user4Edit);
+					page = "WEB-INF/jsp/edituser.jsp";
+				}
+			}
+			
+			if (request.getParameter("Add") != null) {
+				User user4Edit = new User("");
+				user4Edit.setId(0);
+				user4Edit.setIsAdmin(0);
+				request.setAttribute("user4Edit", user4Edit);
+				page = "WEB-INF/jsp/edituser.jsp";
+			}
+			
+			if (request.getParameter("OK") != null) {
+  			    logger.info("Start EditUser ( " + userId + " ) ");				
+				String nm = request.getParameter("userName");
+				String login = request.getParameter("userLogin");
+				String password = request.getParameter("userPassword");
+				String isAdmin = request.getParameter("isAdmin");
+				User user4Edit = new User(login,nm);
+				user4Edit.setPassword(password);
+				user4Edit.setId(Integer.parseInt(userId));
+				user4Edit.setIsAdmin(Integer.parseInt(isAdmin));
+			    if (rentCarService.editUser(user4Edit)) {
+			    	request.setAttribute("infoMessage", "User was added or updated successfully.");
+			    } else {
+			    	request.setAttribute("errorMessage", "User was not added or updated!");
+			    }
+				Collection users = rentCarService.GetAllUsers();
+			    request.setAttribute("users", users);
+				page = "WEB-INF/jsp/admin.jsp";
+			}
+
+			if (request.getParameter("Cancel") != null) {
+				Collection users = rentCarService.GetAllUsers();
+			    request.setAttribute("users", users);
+				page = "WEB-INF/jsp/admin.jsp";
+			}
+			
+			Cookie[] cookie = request.getCookies();
+			for (Cookie cook : cookie){
+				if (cook.getName().equals("sessionId")) {
+					int currentuserId = sessionPool.getUserIdBySessionId(cook.getValue());
+					User user = rentCarService.getUserById(currentuserId);
+					request.setAttribute("user", user);
 				}	
-			} else {
-				request.setAttribute("errorMessage", "User not found or wrong password!");
-				page = "index.jsp";
-			}*/
+			}	
+			 
 		} catch (ServiceException e){
 			request.setAttribute("errorMessage", "Error: " + e.getMessage());
 			page = "error.jsp";
 		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+		//logger.info("getRequestDispatcher done. page: " + page);
 		dispatcher.forward(request, response);
+		//logger.info("forward done");
+
 		
 	}
 	
-	private int checkAction(HttpServletRequest req) {
-        if (req.getParameter("Add") != null) {
-            return 1;
-        }
-        if (req.getParameter("Edit") != null) {
-            return 2;
-        }
-        if (req.getParameter("Delete") != null) {
-        	return 3;
-        }
-        return 0;
-    }
-	
-
 }

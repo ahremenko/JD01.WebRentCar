@@ -4,28 +4,28 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Add or edit user</title>
 </head>
 <body>
-        <form action="<c:url value="/main"/>" method="POST">
+        <form action ="RentCarApp" method="POST">
         	<input type="hidden" name="command" value="editUser"/>
-            <input type="hidden" name="userId" value="${user.getId}"/>
+            <input type="hidden" name="userId" value="${user4Edit.getId()}"/>
             <table>
                 <tr>
-                    <td>Имя:</td><td><input type="text" name="userName" value="${user.getName}"/></td>
+                    <td>Name:</td><td><input type="text" name="userName" value="${user4Edit.getName()}"/></td>
                 </tr>
                 <tr>
-                    <td>Логин:</td><td><input type="text" name="userLogin" value="${user.getLogin}"/></td>
+                    <td>Login:</td><td><input type="text" name="userLogin" value="${user4Edit.getLogin()}"/></td>
                 </tr>
                 <tr>
-                    <td>Пароль:</td><td><input type="text" name="userPassword" value="******"/></td>
+                    <td>Password:</td><td><input type="password" name="userPassword" value="${user4Edit.getPassword()}"/></td>
                 </tr>
                 <tr>
-                    <td>Администратор?</td>
+                    <td>Admin?</td>
                     <td>
                     <c:choose>
-                        <c:when test="${user.getIsAdmin==1}">
+                        <c:when test="${user4Edit.getIsAdmin()==1}">
                             <input type="radio" name="isAdmin" value="1" checked>admin</input>
                             <input type="radio" name="isAdmin" value="0">user</input>
                         </c:when>
@@ -37,6 +37,7 @@
                     </td>
                 </tr>
              </table>
+             <br>
             <table>
                 <tr>
                     <td><input type="submit" value="OK" name="OK"/></td>

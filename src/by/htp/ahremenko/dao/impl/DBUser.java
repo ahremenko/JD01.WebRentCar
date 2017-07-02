@@ -204,10 +204,52 @@ public class DBUser implements DAOUser {
 		}
 	}
 	
-	/*@Override
-	public String EditUser(String lgn, String pwd, String nm) {
-		return null;
-	}*/
+	@Override
+	public boolean editUser(User usr) throws DAOException {
+		ConnectionPool conPool = ConnectionPool.getInstance();
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			try {
+				con = conPool.takeConnection();
+			} catch (ConnectionPoolException e) {
+				throw new DAOException("Can't take connection!");
+			}
+			
+			String sqlQuery = null;
+			if (usr.getId() > 0 ) {
+				sqlQuery = "UPDATE rentcar.rc_user SET user_name = ?, user_login = ?, user_password = ?, is_admin = ? WHERE id = ?";
+			} else {
+				sqlQuery = "INSERT INTO rentcar.rc_user (user_name, user_login, user_password, is_admin ) VALUES ( ?, ?, ?, ?)";
+			}
+			ps = con.prepareStatement(sqlQuery);
+			ps.setString(1, usr.getName());
+			ps.setString(2, usr.getLogin());
+			ps.setString(3, usr.getPassword());
+			ps.setInt(4, usr.getIsAdmin());
+			if (usr.getId() > 0 ) {
+				ps.setInt(5, usr.getId());
+			}	
+			ps.executeUpdate();
+			return true;
+			
+		} catch (SQLException e) {
+			logger.info("SQL-Exception: " + e.getMessage());
+			throw new DAOException("SQL-Exception: " + e.getMessage());
+		} finally {
+			try {
+				if (ps != null){ ps.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+			try {
+				if (con != null) {con.close();}
+			} catch (SQLException e) {
+				throw new DAOException("SQL-Exception: " + e.getMessage());
+			}
+		}
+		
+	}
 	
 
 }

@@ -14,6 +14,8 @@ public interface RentCarService {
 		public boolean deleteUserById(int id) throws ServiceException;
 		
 		public User getUserById(int id) throws ServiceException;
+		
+		public boolean editUser(User usr) throws ServiceException;
 
 }
 

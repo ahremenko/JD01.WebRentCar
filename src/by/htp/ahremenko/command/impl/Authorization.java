@@ -27,7 +27,7 @@ public class Authorization implements Command {
 		String login = request.getParameter("userLogin");
 		String password = request.getParameter("userPassword");
 		
-		logger.info("Login: " + login + ", Password: " + password);
+		// logger.info("Login: " + login + ", Password: " + password);
 		
 		ServiceFactory factory = ServiceFactory.getInstance();
 		RentCarService rentCarService = factory.getRentCarService();
@@ -54,13 +54,8 @@ public class Authorization implements Command {
 			request.setAttribute("errorMessage", "Error: " + e.getMessage());
 			page = "error.jsp";
 		}
-		
 		//logger.info("Current sessionPool: " + sessionPool.toString());
-		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 		dispatcher.forward(request, response);
-		
 	}
-	
-
 }
